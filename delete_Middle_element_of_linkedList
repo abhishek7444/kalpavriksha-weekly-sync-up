@@ -1,0 +1,85 @@
+#include <stdio.h>
+#include<stdlib.h>
+#include<string.h>
+typedef struct Node
+{
+    char data;
+    struct Node* next;
+}Node;
+void printLinkedList(Node* head)
+{
+    Node* temp = head;
+    while(temp!=NULL)
+    {
+        printf("%c",temp->data);
+        temp  = temp->next;
+    }
+}
+Node* createNode(char data)
+{
+    Node* newNode = (Node*) malloc(sizeof(Node));
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
+}
+void insert(Node** head, char data)
+{
+    Node* newNode = createNode(data);
+    if(*head==NULL)
+    {
+        *head = newNode;
+    }
+    else
+    {
+        newNode->next = *head;
+        *head = newNode;
+    }
+}
+int main()
+{
+    Node* head = NULL;
+    
+    int n;
+    printf("Enter no. of nodes : ");
+    scanf("%d",&n);
+    
+    char inputList[100000];
+    char string[10000];
+    int index=0;
+    char ch;
+    int it = 0;
+    fgets(inputList,sizeof(inputList),stdin);
+    inputList[strcspn(inputList,"\n")] = '\0';
+    while(1){
+        if(inputList[it]!=' ')
+        {     
+            scanf("%c",&string[index]);
+            index++;
+        }
+        it++;
+        if((ch=getchar())=='\n') break;
+    }
+    if(index==0) return 0;
+    for(int i = index-1;i>=0;i--)
+    {
+        insert(&head,string[i]);
+    }
+    
+    Node* slow = head;
+    Node* fast = head->next;
+    Node* prev = NULL;
+    
+    while(fast && fast->next)
+    {
+        prev = slow;
+        slow = slow->next;
+       fast = fast->next->next; 
+    }
+    
+
+    prev->next = slow->next;
+    free(slow);
+    printLinkedList(head);
+
+    return 0;
+}
